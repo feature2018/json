@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7 
+version = '1.0'
+group = 'com.streametry'
+//archivesBaseName = "streametry-json"
+//jar.baseName = archivesBaseName
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Streametry Json', 'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1'
+    testCompile 'junit:junit:4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
