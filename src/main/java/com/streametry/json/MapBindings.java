@@ -25,6 +25,7 @@ package com.streametry.json;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -96,4 +97,22 @@ public abstract class MapBindings implements Bindings {
 		return toMap().get(key);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	/** Merge two maps recursively **/
+	static void mergeMaps(Map<String, Object> m1, Map<String, Object> m2) {
+
+		for(Entry<String, Object> e: m2.entrySet()) {
+			Object otherVal = e.getValue();
+			if( otherVal instanceof Map ) {
+				Object myVal = m1.get(e.getKey());
+				if( myVal instanceof Map )
+					mergeMaps( (Map) myVal, new LinkedHashMap<>( (Map) otherVal ) );
+				else
+					m1.put(e.getKey(), otherVal);
+
+			} else {
+				m1.put(e.getKey(), otherVal);
+			}
+		}
+	}
 }

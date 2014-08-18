@@ -24,14 +24,21 @@ JSON handling library aiming to minimise verbosity and maximise convenience
     new Json("{port: 80}"); // from string
     new Json( hashMap );  // from map
     new Json("port", 80); // key-value
-    new Json() { int port = 80; } // form fields     
+    new Json() { int port = 80; } // form fields 
 ## Get/set values
 
-    Json json = new Json().set("port", 80).set("host", "localhost"); // chain
+    Json json = new Json().set("port", 80)
+                          .set("host", "localhost"); // chain calls
     
     Json nested = json.at("path", "to", "nested", "object");
     
     int port = json.get("port", 0); // avoid casting using default value
+    
+    json.merge( anotherJson ); // merge values recursively
+
+As well as all the methods from Map:
+
+   - isEmpty(), keySet(), containsKey(), entrySet(), ...
     
 ## Scripting usage
 

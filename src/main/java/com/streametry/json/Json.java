@@ -93,6 +93,14 @@ public class Json extends MapBindings {
 		return this;
 	}
 
+	/** Merge other json into this one recursively
+	 * @return this
+	 **/
+	public Json merge(Json other) {
+		mergeMaps(toMap(), other.toMap());
+		return this;
+	}
+
 	/**
 	 * Get nested JSON object or {@link #EMPTY} JSON object if nothing found
 	 * @param keys path to nested object
@@ -115,7 +123,8 @@ public class Json extends MapBindings {
 		Map<String, Object> fieldVals = new LinkedHashMap<>();
 		for(Field f: getClass().getDeclaredFields()) {
 			Object val = getFieldValue(f, this);
-			if( val != null && !isStatic(f.getModifiers()) ) fieldVals.put( f.getName() , val);
+			if( val != null && !isStatic(f.getModifiers()) )
+				fieldVals.put( f.getName() , val);
 		}
 		return fieldVals;
 	}

@@ -109,4 +109,15 @@ public class JsonTest {
 		assertTrue( j.at("a", "c").isEmpty() );
 	}
 
+	@Test
+	public void mergeProducesCombinedJson() throws Exception {
+		Json j1 = new Json("a", new Json("b", 1)).set("c", 1);
+		Json j2 = new Json("a", new Json("b", 2)).set("d", 1);
+
+		Json expected = new Json("a", new Json("b", 2)).set("c", 1).set("d", 1);
+
+		assertEquals(expected, j1.merge(j2));
+		j2.set("e", 1);
+		assertEquals(expected, j1);
+	}
 }

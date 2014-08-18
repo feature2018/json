@@ -60,11 +60,24 @@ public class JsonScriptingTest {
 	public void usableAsFunctionArgument() throws Exception {
 
 		Json j = new Json("a", 5);
+
 		eng.eval("function inc(j){ j.b = j.a+1; }");
 
 		inv.invokeFunction("inc", j);
 
 		assertEquals(6, j.get("b", 0).intValue());
+	}
+
+	@Test
+	public void modifiableAsFunctionArgument() throws Exception {
+
+		Json addr = new Json("port", 80);
+
+		eng.eval("function nextPort(addr) { addr.port++; }");
+
+		inv.invokeFunction("nextPort", addr);
+
+		assertEquals(81, addr.get("port", 0.0).intValue());
 	}
 
 	@Test
