@@ -1,12 +1,22 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'nexus'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7 
 version = '1.0'
 group = 'com.streametry'
-//archivesBaseName = "streametry-json"
-//jar.baseName = archivesBaseName
+archivesBaseName = "streametry-json"
+jar.baseName = archivesBaseName
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
+    }
+}
 
 jar {
     manifest {
@@ -23,14 +33,34 @@ dependencies {
     testCompile 'junit:junit:4.+'
 }
 
-test {
-    systemProperties 'property': 'value'
-}
 
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
+modifyPom {
+    project {
+        name 'Streametry Json'
+        description 'Mini library for handling JSON objects in Java'
+        url 'https://github.com/streametry/json'
+        inceptionYear '2014'
+
+        scm {
+            url 'https://github.com/streametry/json'
+            connection 'scm:https://streametric@github.com/streametry/json.git'
+            developerConnection 'scm:git://github.com/streametry/json.git'
+        }
+
+        licenses {
+            license {
+                name 'MIT'
+                url 'http://opensource.org/licenses/MIT'
+                distribution 'repo'
+            }
+        }
+        
+        developers {
+            developer {
+                id 'streametry'
+                email 'dev@streametry.com'
+            }
+        }
     }
 }
+

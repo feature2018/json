@@ -1,6 +1,6 @@
-# json
+# Streametry Json
 
-JSON handling library aiming to minimise verbosity and maximise convenience
+Mini library for handling JSON objects in Java. Aims to increase convenience, minimise verbosity and play well with Nashorn JavaScript engine
 
     Json addr = new Json() {
     		String host = "localhost";
@@ -9,15 +9,16 @@ JSON handling library aiming to minimise verbosity and maximise convenience
     out.println( addr ); // {"host": "localhost", "port": 80}
     out.println( addr.get("port") ); // 80
 
+
 ## Features
 
- - Simple and convenient constructors (see below)
+ - Simple and convenient constructors
  - Implements `Map` interface so you can treat it like a Map
  - JDK8 Nashorn compatible - use it in JavaScript functions
  - Convenience methods for building and getting values
  - Serialize to/from String
- - cast-less value access
- - Provides equals/hashCode
+ - Access properties without explicit casting
+ - Provides equals()/hashCode() methods, so you can compare objects
 
 ## Constructors
 
@@ -30,9 +31,9 @@ JSON handling library aiming to minimise verbosity and maximise convenience
     Json json = new Json().set("port", 80)
                           .set("host", "localhost"); // chain calls
     
+    int port = json.get("port", 0); // avoid casting 
+     
     Json nested = json.at("path", "to", "nested", "object");
-    
-    int port = json.get("port", 0); // avoid casting using default value
     
     json.merge( anotherJson ); // merge values recursively
 
@@ -42,7 +43,7 @@ As well as all the methods from Map:
     
 ## Scripting usage
 
-You can pass `Json` to Nashorn JavaScript functions and access/modify it:
+You can pass `Json` to Nashorn JavaScript functions and treat it like a native JSON object:
 
     Json addr = new Json("port", 80);
 
