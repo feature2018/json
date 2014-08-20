@@ -30,6 +30,7 @@ import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -61,6 +62,7 @@ public class JsonSerializer {
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> deserialize(String jsonString) {
 		try {
+			if( jsonString.isEmpty() ) return new LinkedHashMap<String, Object>();
 			return serializer.readValue(jsonString, Map.class);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);

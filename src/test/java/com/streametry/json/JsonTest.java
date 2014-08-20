@@ -23,6 +23,7 @@ THE SOFTWARE.
  */
 package com.streametry.json;
 
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -87,8 +88,8 @@ public class JsonTest {
 
 	@Test
 	public void twoJsonsWithSamePropertiesAreEqual() throws Exception {
-		Json json = new Json("key", 123).set("key2", "val");
-		Json json2 = new Json("key2", "val").set("key", 123);
+		Json json = new Json("key", 123).set("key2", "val").set("n", new Json("a", 1));
+		Json json2 = new Json("key2", "val").set("key", 123).set("n", new Json("a", 1));
 
 		assertEquals( json, json2 );
 		assertEquals( json.hashCode(), json2.hashCode() );
@@ -107,6 +108,17 @@ public class JsonTest {
 
 		assertEquals(new Json("c", 1), j.at("a", "b"));
 		assertTrue( j.at("a", "c").isEmpty() );
+		assertEquals(Json.EMPTY, j.at("a", "c") );
+
+	}
+
+	@Test
+	public void getWithDefaultValueReturnsNestedJson() throws Exception {
+		Json j = new Json("a", new Json("b", 1));
+
+		assertEquals(new Json("b", 1), j.get("a", Json.EMPTY));
+		assertEquals( singletonMap("b", 1), j.get("a") );
+		assertEquals(Json.EMPTY, j.get("missing", Json.EMPTY));
 	}
 
 	@Test

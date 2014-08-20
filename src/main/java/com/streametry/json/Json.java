@@ -50,7 +50,7 @@ public class Json extends MapBindings {
 	}
 
 	public Json(String key, Object value) {
-		toMap().put(key, value);
+		set(key, value);
 	}
 
 	@Override
@@ -80,15 +80,17 @@ public class Json extends MapBindings {
 		return toMap().hashCode();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	/** Get a value or a default value **/
 	public <T> T get(String key, T defaultValue) {
 		Object v = toMap().get(key);
+		if( defaultValue instanceof Json && v instanceof Map ) v = new Json( (Map) v );
 		return v==null ? defaultValue : (T) v;
 	}
 
 	/** Same as {@link #put(String, Object)} but returns itself for chaining **/
 	public Json set(String key, Object val) {
+		if( val instanceof Json ) val = ((Json) val).toMap();
 		toMap().put(key, val);
 		return this;
 	}
@@ -120,7 +122,7 @@ public class Json extends MapBindings {
 
 	/** Read declared field values using reflection **/
 	Map<String, Object> readFields() {
-		Map<String, Object> fieldVals = new LinkedHashMap<>();
+		Map<String, Object> fieldVals = new LinkedHashMap<String, Object>();
 		for(Field f: getClass().getDeclaredFields()) {
 			Object val = getFieldValue(f, this);
 			if( val != null && !isStatic(f.getModifiers()) )

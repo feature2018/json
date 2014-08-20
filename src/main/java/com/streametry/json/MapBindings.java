@@ -106,7 +106,7 @@ public abstract class MapBindings implements Bindings {
 			if( otherVal instanceof Map ) {
 				Object myVal = m1.get(e.getKey());
 				if( myVal instanceof Map )
-					mergeMaps( (Map) myVal, new LinkedHashMap<>( (Map) otherVal ) );
+					mergeMaps( (Map) myVal, new LinkedHashMap( (Map) otherVal ) );
 				else
 					m1.put(e.getKey(), otherVal);
 

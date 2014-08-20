@@ -20,6 +20,12 @@ Mini library for handling JSON objects in Java. Aims to increase convenience, mi
  - Access properties without explicit casting
  - Provides equals()/hashCode() methods, so you can compare objects
 
+## Download
+
+Grab it from [Maven central](http://search.maven.org/#search%7Cga%7C1%7Cstreametry-json):
+
+- **group**: 'com.streametry', **name**: 'streametry-json', **version**: '1.0'
+
 ## Constructors
 
     new Json("{port: 80}"); // from string
@@ -57,7 +63,7 @@ You can pass `Json` to Nashorn JavaScript functions and treat it like a native J
 
     gradle jar
     
-Note: running tests requires JDK 8 due to Nashorn tests. JDK 7 is required for compiling and building the jar.
+Note: running tests requires JDK 8 due to Nashorn tests. Java 6 is required for compiling and building the jar.
 
 ## License
 
