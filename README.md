@@ -24,7 +24,7 @@ Mini library for handling JSON objects in Java. Aims to increase convenience, mi
 
 Grab it from [Maven central](http://search.maven.org/#search%7Cga%7C1%7Cstreametry-json):
 
-- **group**: 'com.streametry', **name**: 'streametry-json', **version**: '1.0'
+- **group**: 'com.streametry', **name**: 'streametry-json', **version**: '1.0.1'
 
 ## Constructors
 
