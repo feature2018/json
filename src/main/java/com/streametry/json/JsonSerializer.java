@@ -42,7 +42,7 @@ public class JsonSerializer {
 		.configure(ALLOW_COMMENTS, true).configure(ALLOW_UNQUOTED_CONTROL_CHARS, true)
 		.configure(ALLOW_SINGLE_QUOTES, true).configure(ALLOW_UNQUOTED_FIELD_NAMES, true);
 
-	public static String toString(Map<String, Object> val) {
+	public static String toJsonString(Map<String, Object> val) {
 		try {
 			return serializer.writeValueAsString(val);
 		} catch (JsonProcessingException e) {
@@ -60,7 +60,7 @@ public class JsonSerializer {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> deserialize(String jsonString) {
+	public static Map<String, Object> parse(String jsonString) {
 		try {
 			if( jsonString.isEmpty() ) return new LinkedHashMap<String, Object>();
 			return serializer.readValue(jsonString, Map.class);

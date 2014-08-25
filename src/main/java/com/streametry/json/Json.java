@@ -23,8 +23,13 @@ THE SOFTWARE.
  */
 package com.streametry.json;
 
-import static com.streametry.json.JsonSerializer.deserialize;
 import static com.streametry.json.JsonSerializer.getFieldValue;
+import static com.streametry.json.JsonSerializer.parse;
+import static com.streametry.json.JsonSerializer.toJsonString;
+import static com.streametry.json.MapOps.EMPTY_MAP;
+import static com.streametry.json.MapOps.deepCopyMap;
+import static com.streametry.json.MapOps.getNested;
+import static com.streametry.json.MapOps.mergeMaps;
 import static java.lang.reflect.Modifier.isStatic;
 
 import java.lang.reflect.Field;
@@ -36,24 +41,30 @@ public class Json extends MapBindings {
 
 	public static final Json EMPTY = new Json(EMPTY_MAP);
 
+	/** Map where all the properties are stored. Nested Json objects are stored as Maps **/
 	Map<String, Object> map;
 
+	/** Construct empty JSON Object **/
 	public Json() {
 	}
 
+	/**  Construct a JSON Object by parsing a string **/
 	public Json(String jsonString) {
-		map = deserialize(jsonString);
+		map = parse(jsonString);
 	}
 
+	/**  Construct a JSON Object from a map. Also usable as a copy constructor **/
 	public Json(Map<String, Object> properties) {
-		map = properties;
+		map = unwrap(properties);
 	}
 
+	/**  Construct a JSON Object with single key and value **/
 	public Json(String key, Object value) {
 		set(key, value);
 	}
 
 	@Override
+	/** Get the underlying map that stores keys and values **/
 	public Map<String, Object> toMap() {
 		if( map == null )
 			map = readFields();
@@ -66,13 +77,14 @@ public class Json extends MapBindings {
 	}
 
 	@Override
+	/** Convert to JSON string representation **/
 	public String toString() {
-		return JsonSerializer.toString(toMap());
+		return toJsonString(toMap());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return (obj instanceof Json) && toMap().equals( ((Json)obj).toMap() );
+	public boolean equals(Object it) {
+		return (it instanceof Json) && toMap().equals( ((Json)it).toMap() );
 	}
 
 	@Override
@@ -90,12 +102,23 @@ public class Json extends MapBindings {
 
 	/** Same as {@link #put(String, Object)} but returns itself for chaining **/
 	public Json set(String key, Object val) {
-		if( val instanceof Json ) val = ((Json) val).toMap();
-		toMap().put(key, val);
+		put(key, val);
 		return this;
 	}
 
-	/** Merge other json into this one recursively
+	@Override
+	public Object put(String key, Object value) {
+		return toMap().put(key, unwrap(value));
+	}
+
+	@SuppressWarnings("unchecked")
+	/** Get the map out of Json. Store nested Json objects as Maps **/
+	static <T> T unwrap(T val) {
+		if( val instanceof Json ) return (T) ((Json) val).toMap();
+		return val;
+	}
+
+	/** Merge other json into this one recursively. Overwrites values from other if they exist in this.
 	 * @return this
 	 **/
 	public Json merge(Json other) {
@@ -104,20 +127,18 @@ public class Json extends MapBindings {
 	}
 
 	/**
-	 * Get nested JSON object or {@link #EMPTY} JSON object if nothing found
+	 * Get nested JSON object
 	 * @param keys path to nested object
+	 * @return nested JSON object or {@link #EMPTY} JSON object if nothing found
 	 */
 	public Json at(String ... keys) {
-		Json cur = this;
+		Map<String, Object> nested = getNested(toMap(), keys);
+		return (nested == EMPTY_MAP) ? EMPTY : new Json(nested);
+	}
 
-		for(String key : keys)
-			if( cur.get(key) instanceof Json )
-				cur = cur.get(key, EMPTY);
-			else if( cur.get(key) instanceof Map )
-				cur = new Json( cur.get(key, EMPTY_MAP) );
-			else return EMPTY;
-
-		return cur;
+	/** Create a (deep) copy of this Json. **/
+	public Json copy() {
+		return new Json( deepCopyMap(toMap()) );
 	}
 
 	/** Read declared field values using reflection **/
@@ -132,3 +153,4 @@ public class Json extends MapBindings {
 	}
 
 }
+

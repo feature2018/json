@@ -25,6 +25,7 @@ package com.streametry.json;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -131,5 +132,16 @@ public class JsonTest {
 		assertEquals(expected, j1.merge(j2));
 		j2.set("e", 1);
 		assertEquals(expected, j1);
+	}
+
+	@Test
+	public void copyMakesDeepCopy() throws Exception {
+
+		Json j1 = new Json("a", new Json("b", 1));
+		Json copy = j1.copy();
+
+		assertEquals(j1, copy);
+		copy.set("c", 1);
+		assertNotSame(j1, copy);
 	}
 }

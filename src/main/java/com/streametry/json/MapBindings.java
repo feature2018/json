@@ -24,16 +24,13 @@ THE SOFTWARE.
 package com.streametry.json;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 import javax.script.Bindings;
 
+/** {@link Bindings} that delegate operations to a {@link Map} **/
 public abstract class MapBindings implements Bindings {
-
-	public static Map<String, Object> EMPTY_MAP = Collections.emptyMap();
 
 	public abstract Map<String, Object> toMap();
 
@@ -95,24 +92,5 @@ public abstract class MapBindings implements Bindings {
 	@Override
 	public Object remove(Object key) {
 		return toMap().get(key);
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	/** Merge two maps recursively **/
-	static void mergeMaps(Map<String, Object> m1, Map<String, Object> m2) {
-
-		for(Entry<String, Object> e: m2.entrySet()) {
-			Object otherVal = e.getValue();
-			if( otherVal instanceof Map ) {
-				Object myVal = m1.get(e.getKey());
-				if( myVal instanceof Map )
-					mergeMaps( (Map) myVal, new LinkedHashMap( (Map) otherVal ) );
-				else
-					m1.put(e.getKey(), otherVal);
-
-			} else {
-				m1.put(e.getKey(), otherVal);
-			}
-		}
 	}
 }
