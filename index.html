@@ -48,7 +48,7 @@ addr.set("path", "/").set("proto", "http");
 addr.get("port");   // 80
 </code></pre>
 
-<p>See tests for more examples.    </p>
+<p>See tests for more examples or <a href="/json/javadoc/">Javadoc</a>  </p>
 
 <h2>
 <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
@@ -75,7 +75,7 @@ addr.get("port");   // 80
 <pre><code>new Json("{port: 80}"); // from string
 new Json( hashMap );  // from map
 new Json("port", 80); // key-value
-new Json() { int port = 80; } // from fields 
+new Json() { int port = 80; } // from fields
 </code></pre>
 
 <h2>
@@ -84,7 +84,7 @@ new Json() { int port = 80; } // from fields
 <pre><code>Json json = new Json().set("port", 80)
                       .set("host", "localhost"); // chain calls
 
-int port = json.get("port", 0); // get or return default. avoid casting 
+int port = json.get("port", 0); // get or return default. avoid casting
 
 Json nested = json.at("path", "to", "nested"); // json.path.to.nested
 
